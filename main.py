@@ -2,16 +2,15 @@ from fastapi import FastAPI, HTTPException, Query
 import httpx
 from pydantic import BaseModel
 from typing import Union
+import uvicorn
+import warnings
 
 app = FastAPI(title="QamqorParser API")
-
 #простое решение задачи это просто заходить на сайт и взять токен капчи из кода страницы 
 CAPTCHA_STUB = "введите recaptcha token"
 
-
 TIMEOUT = 30.0
 BASE_URL = "https://qamqor.gov.kz/api/public/person_case"
-
 
 class SearchResponse(BaseModel):
     data: Union[dict, None]
@@ -20,7 +19,7 @@ class SearchResponse(BaseModel):
     time: str
 
 async def solve_captcha():
-  
+      
     return CAPTCHA_STUB
 
 async def search_by_last_name(last_name: str, page: int = 0):
@@ -108,7 +107,6 @@ async def api_search_by_iin(
 
 
 if __name__ == "__main__":
-    import uvicorn
-    import warnings
+   
     warnings.filterwarnings("ignore", message="Unverified HTTPS request")
     uvicorn.run(app, host="0.0.0.0", port=8000)
